@@ -31,7 +31,7 @@ def mutateGene(gene, n):
 
 def createGenome():
     population = []
-    for i in range(0,2000):
+    for i in range(0,1000):
         population.append([generateGene(), 0])
     return population
 
@@ -74,14 +74,15 @@ def createImageFromGenome(genome):
         image = drawRect(image, translation[0], translation[1], translation[2], translation[3], translation[4], translation[5])
     return image
 
-#TODO Prendre la distance px, ajouter le tout, diviser par le nombre de px. 
 def evaluateImage(image, base):
-    nbPx = len(base)*len(base[0])
-    #...
-    return 0
+    base = cv2.imread('base.png')
+    return cv2.absdiff(image, base).sum()
 
 population = []
 for i in range(0,100):
     population.append(createGenome())
-for i in range(0, len(population)):
-    cv2.imwrite('test'+str(i)+'.png', createImageFromGenome(population[i]))
+for individu in range(0, len(population)):
+    population[individu][1] = evaluateImage(createImageFromGenome(population[individu]), 'base.png')
+population = np.sort(population,0)
+#createImageFromGenome(population[0])
+#TODO: croiser, muter, createImage doesn't work the second time ?
