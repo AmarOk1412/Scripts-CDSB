@@ -19,7 +19,7 @@ Interface::Interface()
 
     std::cout << "Generate a map" << std::endl;
     map = new Map(nbCity, mapSize);
-    map->saveMap("Cities.png");
+    map->saveMap("images/Cities.png");
     std::cout << "Map saved (Cities.png)" << std::endl;
 
 
@@ -29,7 +29,8 @@ Interface::Interface()
 
     for(int i = 1; i <= nbGen; ++i)
     {
-        cv::Mat gen = cv::imread("Cities.png");
+        cv::Mat gen = cv::imread("images/Cities.png");
+        cv::Mat lowImg = cv::imread("images/Cities.png");
         std::cout << "Gen n° " << i << std::endl;
 
         if(i > 1)
@@ -53,9 +54,21 @@ Interface::Interface()
                      (255, 0, 0),
                      2);
 
+        std::cout << "Get low ind" << std::endl;
+        Person low = pop->getLowScore();
+        std::cout << "Done ! Score : " << low.score << std::endl;
 
-        std::cout << "Save image : gen" << i << ".png" << std::endl;
-        cv::imwrite("gen"+ std::to_string(i) +".png", gen);
+        for(auto j = 1; j < low.representation.size(); ++j)
+            cv::line(lowImg,
+                     cv::Point(map->getCities()[low.representation[j-1]].x, map->getCities()[low.representation[j-1]].y),
+                     cv::Point(map->getCities()[low.representation[j]].x, map->getCities()[low.representation[j]].y),
+                     (255, 0, 0),
+                     2);
+
+        std::cout << "Save image : images/genb" << i << ".png" << std::endl;
+        cv::imwrite("images/genb"+ std::to_string(i) +".png", gen);
+        std::cout << "Save image : images/genl" << i << ".png" << std::endl;
+        cv::imwrite("images/genl"+ std::to_string(i) +".png", lowImg);
         std::cout << "Prepare new generation" << std::endl;
         pop->newGeneration();
         pop;

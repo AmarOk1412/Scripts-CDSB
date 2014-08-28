@@ -126,11 +126,30 @@ Person Population::getBestScore()
     auto minScore = pop[0].score;
     Person minInd = pop[0];
 
-    for(auto i = 0; i < pop.size(); ++i)if(pop[i].score < minScore)
+    for(auto i = 0; i < pop.size(); ++i)
+        if(pop[i].score < minScore)
         {
             minScore = pop[i].score;
             minInd = pop[i];
         }
 
     return minInd;
+}
+
+
+
+Person Population::getLowScore()
+{
+
+    auto highScore = pop[0].score;
+    Person highInd = pop[0];
+
+    for(auto i = 0; i < pop.size(); ++i)
+        if(pop[i].score > highScore)
+        {
+            highScore = pop[i].score;
+            highInd = pop[i];
+        }
+
+    return highInd;
 }

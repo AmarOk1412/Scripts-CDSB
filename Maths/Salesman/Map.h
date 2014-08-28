@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 
-#include "coord.h"
+#include "Coord.h"
 
 class Map
 {

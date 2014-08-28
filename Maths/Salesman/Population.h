@@ -2,7 +2,7 @@
 #define POPULATION_H
 
 #include "Person.h"
-#include "coord.h"
+#include "Coord.h"
 
 
 class Population
@@ -14,6 +14,7 @@ public:
     void mutate(int luck);
     void calcScore(std::vector<Coord> cities);
     Person getBestScore();
+    Person getLowScore();
 
 private:
     void score(Person &ind, std::vector<Coord> cities);
