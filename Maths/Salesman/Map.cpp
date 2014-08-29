@@ -5,7 +5,7 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
-Map::Map(int nbCity, int mapSize)
+Map::Map(int const nbCity, int const mapSize)
 {
     cities = generateCities(nbCity, mapSize);
     m_mapSize = mapSize;

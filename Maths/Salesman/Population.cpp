@@ -3,6 +3,7 @@
 #include <random>
 #include <algorithm>
 #include <cstring>
+#include <iostream>
 
 struct Comparator {
   bool operator()(Person a, Person b) {
@@ -82,16 +83,27 @@ void Population::newGeneration()
 
     sort(pop.begin(), pop.end(), comparator);
 
-    for(auto i = 0; i < pop.size()/2 ; ++i)
+    for(auto i = 0; i < pop.size()/4 ; ++i)
         newPop.push_back(pop.at(i));
 
-    for(auto i = 0; i < pop.size()/2 ; ++i)
+    for(auto i = 0; i < pop.size()/4 ; ++i)
     {
         auto ind1 = r()%pop.size()/2 + 1;
         auto ind2 = r()%pop.size()/2 + 1;
 
         newPop.push_back(crossOver(pop.at(ind1), pop.at(ind2)));
     }
+
+    for(auto i = 0; i < pop.size()/4 ; ++i)
+    {
+        auto ind1 = r()%pop.size();
+        auto ind2 = r()%pop.size();
+
+        newPop.push_back(crossOver(pop.at(ind1), pop.at(ind2)));
+    }
+
+    for(auto i = 0; i < pop.size()/4 ; ++i)
+        newPop.push_back(Person(pop.at(0).representation.size()));
 
     pop.clear();
     pop = newPop;
