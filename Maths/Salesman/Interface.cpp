@@ -8,7 +8,7 @@
 
 Interface::Interface()
 {
-    int nbCity = 0, mapSize = 0, nbGen = 0;
+    auto nbCity = 0, mapSize = 0, nbGen = 0, moduloPhoto = 0;
     std::cout << "Travelling Salesman problem resolver" << std::endl;
     std::cout << "Number of cities ? ";
     std::cin >> nbCity;
@@ -16,6 +16,8 @@ Interface::Interface()
     std::cin >> mapSize;
     std::cout << "Generation ? ";
     std::cin >> nbGen;
+    std::cout << "Take a pictuve each x generation ? ";
+    std::cin >> moduloPhoto;
 
     std::cout << "Generate a map" << std::endl;
     map = new Map(nbCity, mapSize);
@@ -65,13 +67,16 @@ Interface::Interface()
                      (255, 0, 0),
                      2);
 
-        std::cout << "Save image : images/genb" << i << ".png" << std::endl;
-        cv::imwrite("images/genb"+ std::to_string(i) +".png", gen);
-        std::cout << "Save image : images/genl" << i << ".png" << std::endl;
-        cv::imwrite("images/genl"+ std::to_string(i) +".png", lowImg);
+        if(i%moduloPhoto == 0 || i == 1)
+        {
+            std::cout << "Save image : images/genb" << i << ".png" << std::endl;
+            cv::imwrite("images/genb"+ std::to_string(i) +".png", gen);
+            std::cout << "Save image : images/genl" << i << ".png" << std::endl;
+            cv::imwrite("images/genl"+ std::to_string(i) +".png", lowImg);
+        }
+
         std::cout << "Prepare new generation" << std::endl;
         pop->newGeneration();
-        pop;
     }
 }
 

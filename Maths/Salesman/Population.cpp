@@ -3,7 +3,6 @@
 #include <random>
 #include <algorithm>
 #include <cstring>
-#include <iostream>
 
 struct Comparator {
   bool operator()(Person a, Person b) {
@@ -83,9 +82,11 @@ void Population::newGeneration()
 
     sort(pop.begin(), pop.end(), comparator);
 
+    //1/4 : best score of the previous population (because a mutation could be better)
     for(auto i = 0; i < pop.size()/4 ; ++i)
         newPop.push_back(pop.at(i));
 
+    //1/4 crossOver 1/2 best people of the previous pop
     for(auto i = 0; i < pop.size()/4 ; ++i)
     {
         auto ind1 = r()%pop.size()/2 + 1;
@@ -94,6 +95,7 @@ void Population::newGeneration()
         newPop.push_back(crossOver(pop.at(ind1), pop.at(ind2)));
     }
 
+    //1/4 crossOver of the whole previous population
     for(auto i = 0; i < pop.size()/4 ; ++i)
     {
         auto ind1 = r()%pop.size();
@@ -102,6 +104,7 @@ void Population::newGeneration()
         newPop.push_back(crossOver(pop.at(ind1), pop.at(ind2)));
     }
 
+    //1/4 generate
     for(auto i = 0; i < pop.size()/4 ; ++i)
         newPop.push_back(Person(pop.at(0).representation.size()));
 
