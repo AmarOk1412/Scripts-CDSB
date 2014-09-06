@@ -48,6 +48,17 @@ MapStrInt vectorToMap(std::vector<std::string> const vec)
 	return map;
 }
 
+MapStrInt filtMap(MapStrInt map)
+{
+    std::ifstream filtreFile("filtre");
+    std::string strFiltre((std::istreambuf_iterator<char>(filtreFile)), std::istreambuf_iterator<char>());    
+    std::vector<std::string> filtre = split(strFiltre, "\n");     
+    for (auto i = 0; i < filtre.size(); ++i)
+    	map.erase(filtre[i]);
+    	
+    return map;
+}
+
 int main(int argc, char** argv)
 {
     std::ifstream f("testScript");
@@ -56,14 +67,12 @@ int main(int argc, char** argv)
     std::string delimiter = " &\"'{([-|`_\\)]=}+$£ø*%!§:/;.,?<>\n";
 
     std::vector<std::string> splitStr = split(str, delimiter);
-	MapStrInt map = vectorToMap(splitStr);
+    MapStrInt map = vectorToMap(splitStr);
+    
+    map = filtMap(map);
  
     for (std::map<std::string,int>::iterator it=map.begin(); it!=map.end(); ++it)
         std::cout << it->first << " => " << it->second << '\n';
-	
-
-
-    //Word to map
 
     return 0;
 }
