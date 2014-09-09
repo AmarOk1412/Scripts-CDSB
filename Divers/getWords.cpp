@@ -4,6 +4,7 @@
 #include <streambuf>
 #include <vector>
 #include <map>
+#include <cmath>
 
 typedef std::map<std::string, int> MapStrInt;
 
@@ -59,20 +60,49 @@ MapStrInt filtMap(MapStrInt map)
     return map;
 }
 
+double idf(std::string word, std::vector<MapStrInt> corpus)
+{
+	auto present = 0;
+	for(auto i = 0; i < corpus.size(); ++i)
+		if(corpus[i].find(word) != corpus[i].end())
+			present++;
+				
+	return present == 0 ? present : std::log(double(corpus.size())/double(present));
+}
+
 int main(int argc, char** argv)
 {
-    std::ifstream f("testScript");
-    std::string str((std::istreambuf_iterator<char>(f)), std::istreambuf_iterator<char>());
-
     std::string delimiter = " &\"'{([-|`_\\)]=}+$£ø*%!§:/;.,?<>\n";
-
-    std::vector<std::string> splitStr = split(str, delimiter);
-    MapStrInt map = vectorToMap(splitStr);
     
-    map = filtMap(map);
+    //File1
+    std::ifstream f1("testScript");
+    std::string str((std::istreambuf_iterator<char>(f1)), std::istreambuf_iterator<char>());
+    std::vector<std::string> splitStr = split(str, delimiter);
+    MapStrInt mapF1 = vectorToMap(splitStr);    
+    mapF1 = filtMap(mapF1);
+    
+    //File2
+    std::ifstream f2("doc2");
+    std::string str2((std::istreambuf_iterator<char>(f2)), std::istreambuf_iterator<char>());
+    std::vector<std::string> splitStr2 = split(str2, delimiter);
+    MapStrInt mapF2 = vectorToMap(splitStr2);    
+    mapF2 = filtMap(mapF2);
+    
+    //File3
+    std::ifstream f3("doc3");
+    std::string str3((std::istreambuf_iterator<char>(f3)), std::istreambuf_iterator<char>());
+    std::vector<std::string> splitStr3 = split(str3, delimiter);
+    MapStrInt mapF3 = vectorToMap(splitStr3);    
+    mapF3 = filtMap(mapF3);
+    
+    //Create corpus
+    std::vector<MapStrInt> corpus;
+    corpus.push_back(mapF1);
+    corpus.push_back(mapF2);
+    corpus.push_back(mapF3);
  
-    for (std::map<std::string,int>::iterator it=map.begin(); it!=map.end(); ++it)
-        std::cout << it->first << " => " << it->second << '\n';
+    std::cout << idf("viverra", corpus) << std::endl;
+    std::cout << idf("lorem", corpus) << std::endl;
 
     return 0;
 }
