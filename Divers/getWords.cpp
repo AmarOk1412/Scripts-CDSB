@@ -70,6 +70,20 @@ double idf(std::string word, std::vector<MapStrInt> corpus)
 	return present == 0 ? present : std::log(double(corpus.size())/double(present));
 }
 
+double tf(std::string word, MapStrInt doc)
+{
+	auto occWord = 0;
+	auto nbWord = 0;
+	for(MapStrInt::iterator it = doc.begin(); it != doc.end(); ++it)
+	{
+		if(it->first == word)
+			occWord = it->second;
+		nbWord += it->second;
+	}
+	
+	return double(occWord)/double(nbWord);
+
+}
 int main(int argc, char** argv)
 {
     std::string delimiter = " &\"'{([-|`_\\)]=}+$£ø*%!§:/;.,?<>\n";
@@ -103,6 +117,8 @@ int main(int argc, char** argv)
  
     std::cout << idf("viverra", corpus) << std::endl;
     std::cout << idf("lorem", corpus) << std::endl;
+    std::cout << tf("viverra", mapF1) << std::endl;
+    std::cout << tf("lorem", mapF1) << std::endl;
 
     return 0;
 }
