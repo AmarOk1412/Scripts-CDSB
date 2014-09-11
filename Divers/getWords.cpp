@@ -51,9 +51,14 @@ MapStrInt vectorToMap(std::vector<std::string> const vec)
 
 MapStrInt filtMap(MapStrInt map)
 {
-    std::ifstream filtreFile("filtre");
-    std::string strFiltre((std::istreambuf_iterator<char>(filtreFile)), std::istreambuf_iterator<char>());    
-    std::vector<std::string> filtre = split(strFiltre, "\n");     
+    std::ifstream filtreFileEN("en.stopwords.txt");
+    std::string strFiltreEN((std::istreambuf_iterator<char>(filtreFileEN)), std::istreambuf_iterator<char>());    
+    std::vector<std::string> filtre = split(strFiltreEN, "\n");
+    std::ifstream filtreFileFR("fr.stopwords.txt");
+    std::string strFiltreFR((std::istreambuf_iterator<char>(filtreFileFR)), std::istreambuf_iterator<char>());
+    std::vector<std::string> filtreFR = split(strFiltreFR, "\n");    
+    filtre.insert(filtre.end(), filtreFR.begin(), filtreFR.end());
+    
     for (auto i = 0; i < filtre.size(); ++i)
     	map.erase(filtre[i]);
     	
@@ -84,6 +89,12 @@ double tf(std::string word, MapStrInt doc)
 	return double(occWord)/double(nbWord);
 
 }
+
+double tfidf(std::string word, MapStrInt doc, std::vector<MapStrInt> corpus)
+{
+	return tf(word, doc)*idf(word, corpus);
+}
+
 int main(int argc, char** argv)
 {
     std::string delimiter = " &\"'{([-|`_\\)]=}+$£ø*%!§:/;.,?<>\n";
