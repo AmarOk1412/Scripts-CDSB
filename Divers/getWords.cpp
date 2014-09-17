@@ -6,6 +6,7 @@
 #include <map>
 #include <cmath>
 #include <tuple>
+#include <algorithm>
 
 typedef std::map<std::string, int> MapStrInt;
 typedef std::map<std::string, std::vector<int>> Index;
@@ -115,6 +116,65 @@ int levenshteinDistance(std::string s1, std::string s2)
 	return d[s1.length()][s2.length()];
 }
 
+std::string getR1(std::string word)
+{
+	std::vector<char> vowels = {'a', 'â', 'à', 'ë', 'e', 'é', 'ê', 'è', 'i', 'ï', 'î', 'o', 'ô', 'u', 'û', 'ù', 'y'};
+	auto posR1 = -1;
+	std::string toReturn = "";
+	
+	for(auto i = 0; i < word.length(); ++i)
+	{
+		if(word[i] == 'u' || word[i] == 'i')
+		{
+			if(i > 0 && std::find(vowels.begin(), vowels.end(), word[i-1]) != vowels.end())
+			{
+				posR1 = i;
+				break;
+			}
+			if(i < word.length()-1 && std::find(vowels.begin(), vowels.end(), word[i-1]) != vowels.end())
+			{
+				posR1 = i;
+				break;
+			}
+		}
+		
+		if(i > 0 && word[i] == 'u' && word[i-1] == 'q')
+		{
+			posR1 = i;
+			break;
+		}
+		
+		if(word[i] == 'y')
+		{
+			if(i > 0 && std::find(vowels.begin(), vowels.end(), word[i-1]) != vowels.end())
+			{
+				posR1 = i;
+				break;
+			}
+			if(i < word.length()-1 && std::find(vowels.begin(), vowels.end(), word[i-1]) != vowels.end())
+			{
+				posR1 = i;
+				break;
+			}
+		}
+	}
+	
+	if(posR1 != -1)
+		for(; posR1 < word.length(); ++posR1)
+			toReturn += word[posR1];
+			
+	return toReturn;
+}
+
+std::string stemFRWord(std::string word)
+{
+	std::string toStem = word;
+	
+	std::transform(toStem.begin(), toStem.end(), toStem.begin(), ::tolower);
+	
+	return toStem;
+}
+
 int main(int argc, char** argv)
 {
 		std::vector<std::tuple<std::string, int, int>> Documents;
@@ -151,6 +211,11 @@ int main(int argc, char** argv)
     std::cout << idf("lorem", corpus) << std::endl;
     std::cout << tf("viverra", mapF1) << std::endl;
     std::cout << tf("lorem", mapF1) << std::endl;
+    
+    std::cout << "R1 : jouer " << getR1("jouer") << std::endl;
+    std::cout << "R1 : ennuie " << getR1("ennuie") << std::endl;
+    std::cout << "R1 : yeux " << getR1("yeux") << std::endl;
+    std::cout << "R1 : quand " << getR1("quand") << std::endl;
 
     return 0;
 }
