@@ -116,9 +116,14 @@ int levenshteinDistance(std::string s1, std::string s2)
 	return d[s1.length()][s2.length()];
 }
 
-std::string getR1(std::string word)
+bool isVowel(char c)
 {
 	std::vector<char> vowels = {'a', 'â', 'à', 'ë', 'e', 'é', 'ê', 'è', 'i', 'ï', 'î', 'o', 'ô', 'u', 'û', 'ù', 'y'};
+	return std::find(vowels.begin(), vowels.end(), c) != vowels.end();
+}
+
+std::string getR1(std::string word)
+{
 	auto posR1 = -1;
 	std::string toReturn = "";
 	
@@ -126,12 +131,12 @@ std::string getR1(std::string word)
 	{
 		if(word[i] == 'u' || word[i] == 'i')
 		{
-			if(i > 0 && std::find(vowels.begin(), vowels.end(), word[i-1]) != vowels.end())
+			if(i > 0 && isVowel(word[i-1]))
 			{
 				posR1 = i;
 				break;
 			}
-			if(i < word.length()-1 && std::find(vowels.begin(), vowels.end(), word[i-1]) != vowels.end())
+			if(i < word.length()-1 && isVowel(word[i-1]))
 			{
 				posR1 = i;
 				break;
@@ -146,12 +151,12 @@ std::string getR1(std::string word)
 		
 		if(word[i] == 'y')
 		{
-			if(i > 0 && std::find(vowels.begin(), vowels.end(), word[i-1]) != vowels.end())
+			if(i > 0 && isVowel(word[i-1]))
 			{
 				posR1 = i;
 				break;
 			}
-			if(i < word.length()-1 && std::find(vowels.begin(), vowels.end(), word[i-1]) != vowels.end())
+			if(i < word.length()-1 && isVowel(word[i-1]))
 			{
 				posR1 = i;
 				break;
@@ -163,6 +168,35 @@ std::string getR1(std::string word)
 		for(; posR1 < word.length(); ++posR1)
 			toReturn += word[posR1];
 			
+	return toReturn;
+}
+
+std::string getRV(std::string word)
+{
+	auto posR1 = -1;
+	std::string toReturn = "";
+	std::vector<std::string> except = {"par", "col", "tap"};
+	
+	if(word.length() > 3 && isVowel(word[0]) && isVowel(word[1]))
+		for(auto i = 3; i < word.length(); ++i)
+			toReturn += word[i];
+	else if(std::find(except.begin(), except.end(), word.substr(0,3)) != except.end())
+		for(auto i = 3; i < word.length(); ++i)
+			toReturn += word[i];
+	else
+	{
+		auto i = 1;
+		auto vowel = false;
+		while(i < word.length())
+		{
+			if(vowel)
+				toReturn += word[i];
+			if(isVowel(word[i]))
+				vowel = true;
+			++i;
+		}
+	}
+	
 	return toReturn;
 }
 
@@ -216,6 +250,11 @@ int main(int argc, char** argv)
     std::cout << "R1 : ennuie " << getR1("ennuie") << std::endl;
     std::cout << "R1 : yeux " << getR1("yeux") << std::endl;
     std::cout << "R1 : quand " << getR1("quand") << std::endl;
+    
+    std::cout << "RV : aimer " << getRV("aimer") << std::endl;
+    std::cout << "RV : adorer " << getRV("adorer") << std::endl;
+    std::cout << "RV : voler " << getRV("voler") << std::endl;
+    std::cout << "RV : tapis " << getRV("tapis") << std::endl;
 
     return 0;
 }
