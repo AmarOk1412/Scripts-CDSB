@@ -162,12 +162,40 @@ std::string getR1(std::string word)
 				break;
 			}
 		}
+		
+		if(i > 0 && !isVowel(word[i]) && isVowel(word[i-1]))
+		{
+			posR1 = i+1;
+			break;
+		}
 	}
 	
 	if(posR1 != -1)
 		for(; posR1 < word.length(); ++posR1)
 			toReturn += word[posR1];
 			
+	return toReturn;
+}
+
+std::string getR2(std::string word)
+{
+	std::string toTreat = getR1(word);
+	std::string toReturn = "";
+	
+	auto posR2 = -1;
+	for(auto i = 0; i < toTreat.length(); ++i)
+	{		
+		if(i > 0 && !isVowel(word[i]) && isVowel(word[i-1]))
+		{
+			posR2 = i+1;
+			break;
+		}
+	}
+	
+	if(posR2 != -1)
+		for(; posR2 < toTreat.length(); ++posR2)
+			toReturn += toTreat[posR2];
+	
 	return toReturn;
 }
 
@@ -255,6 +283,10 @@ int main(int argc, char** argv)
     std::cout << "RV : adorer " << getRV("adorer") << std::endl;
     std::cout << "RV : voler " << getRV("voler") << std::endl;
     std::cout << "RV : tapis " << getRV("tapis") << std::endl;
+    
+    std::cout << "R2 : quand " << getR2("quand") << std::endl;
+    std::cout << "R1 : fameusement " << getR1("fameusement") << std::endl;
+    std::cout << "R2 : fameusement " << getR2("fameusement") << std::endl;
 
     return 0;
 }
