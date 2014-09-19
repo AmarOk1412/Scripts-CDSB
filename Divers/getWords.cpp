@@ -7,6 +7,7 @@
 #include <cmath>
 #include <tuple>
 #include <algorithm>
+#include <regex>
 
 typedef std::map<std::string, int> MapStrInt;
 typedef std::map<std::string, std::vector<int>> Index;
@@ -122,10 +123,9 @@ bool isVowel(char c)
 	return std::find(vowels.begin(), vowels.end(), c) != vowels.end();
 }
 
-std::string getR1(std::string word)
+std::string optUpperCase(std::string word)
 {
-	auto posR1 = -1;
-	std::string toReturn = "";
+	std::string toReturn = word;
 	
 	for(auto i = 0; i < word.length(); ++i)
 	{
@@ -133,19 +133,19 @@ std::string getR1(std::string word)
 		{
 			if(i > 0 && isVowel(word[i-1]))
 			{
-				posR1 = i;
+				toReturn[i] = std::toupper(word[i]);
 				break;
 			}
 			if(i < word.length()-1 && isVowel(word[i-1]))
 			{
-				posR1 = i;
+				toReturn[i] = std::toupper(word[i]);
 				break;
 			}
 		}
 		
 		if(i > 0 && word[i] == 'u' && word[i-1] == 'q')
 		{
-			posR1 = i;
+			toReturn[i] = std::toupper(word[i]);
 			break;
 		}
 		
@@ -153,16 +153,29 @@ std::string getR1(std::string word)
 		{
 			if(i > 0 && isVowel(word[i-1]))
 			{
-				posR1 = i;
+				toReturn[i] = std::toupper(word[i]);
 				break;
 			}
-			if(i < word.length()-1 && isVowel(word[i-1]))
+			if(i < word.length()-1 && isVowel(word[i+1]))
 			{
-				posR1 = i;
+				toReturn[i] = std::toupper(word[i]);
 				break;
 			}
 		}
-		
+	}
+			
+	return toReturn;
+}
+
+//BUG
+std::string getR1(std::string word)
+{
+	
+	auto posR1 = -1;
+	std::string toReturn = "";
+	
+	for(auto i = 0; i < word.length(); ++i)
+	{		
 		if(i > 0 && !isVowel(word[i]) && isVowel(word[i-1]))
 		{
 			posR1 = i+1;
@@ -228,6 +241,15 @@ std::string getRV(std::string word)
 	return toReturn;
 }
 
+//std::string removeSuffix(std::string word)
+//{
+//	std::tr1::cmatch res;
+//	std::tr1::regex rx("(ance|iqUe|isme|able|iste|eux|ances|iqUes|ismes|ables|istes)$");
+//	std::tr1::regex_search(word.c_str(), res, rx);
+//	std::cout << res << std::endl;
+//	return "";
+//}
+
 std::string stemFRWord(std::string word)
 {
 	std::string toStem = word;
@@ -274,10 +296,10 @@ int main(int argc, char** argv)
     std::cout << tf("viverra", mapF1) << std::endl;
     std::cout << tf("lorem", mapF1) << std::endl;
     
-    std::cout << "R1 : jouer " << getR1("jouer") << std::endl;
-    std::cout << "R1 : ennuie " << getR1("ennuie") << std::endl;
-    std::cout << "R1 : yeux " << getR1("yeux") << std::endl;
-    std::cout << "R1 : quand " << getR1("quand") << std::endl;
+    std::cout << "optUpperCase : jouer " << optUpperCase("jouer") << std::endl;
+    std::cout << "optUpperCase : ennuie " << optUpperCase("ennuie") << std::endl;
+    std::cout << "optUpperCase : yeux " << optUpperCase("yeux") << std::endl;
+    std::cout << "optUpperCase : quand " << optUpperCase("quand") << std::endl;
     
     std::cout << "RV : aimer " << getRV("aimer") << std::endl;
     std::cout << "RV : adorer " << getRV("adorer") << std::endl;
