@@ -13,8 +13,6 @@ public:
 private:
     Population *pop;
     Map *map;
-
-
 };
 
 #endif // INTERFACE_H

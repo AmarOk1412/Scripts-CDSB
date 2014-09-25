@@ -38,7 +38,7 @@ Interface::Interface()
         if(i > 1)
         {
             std::cout << "Mutate pop" << std::endl;
-            pop->mutate(10);
+            pop->mutate(10 + (i/nbGen)*(1/5));
         }
 
         std::cout << "Calc score" << std::endl;

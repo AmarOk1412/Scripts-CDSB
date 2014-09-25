@@ -4,7 +4,6 @@
 #include "Person.h"
 #include "Coord.h"
 
-
 class Population
 {
 public:
