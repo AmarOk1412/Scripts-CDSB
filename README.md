@@ -1,5 +1,3 @@
-Mes scripts présentés dans coding du soir, bonsoir (http://amarok1412.great-heberg.eu)
-
             DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
                     Version 2, December 2004
 
